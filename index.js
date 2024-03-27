@@ -4,10 +4,10 @@ import { userRouter } from "./routes/user.routes.js"
 import { classRouter } from "./routes/class.router.js"
 import { studentRouter } from "./routes/student.router.js"
 import { attendanceRouter } from "./routes/attendance.router.js"
+
 import cors from "cors"
 import dotenv from "dotenv"
 dotenv.config()
-
 
 const app = express()
 const port = process.env.PORT || 9000

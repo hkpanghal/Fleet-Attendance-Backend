@@ -1,4 +1,3 @@
-import fs from "fs"
 import { User } from "../models/user.models.js"
 import bcrypt from "bcrypt"
 import crypto from "crypto"
@@ -9,7 +8,11 @@ export const handleSignUp = async (req,res) => {
     try {
         const user = await User.create({...req.body})
         user.save()
-        return res.status(200).json({success:true,msg:"user created successfully",user})
+
+        let userData = {_id:user._id,email:user.email,first_name:user.first_name,last_name:user.last_name}
+
+        return res.status(200).json({success:true,msg:"user created successfully",user:userData})
+
         
     } catch (error) {
         console.log(error)
@@ -28,9 +31,11 @@ export const handleSignIn = async (req,res) => {
     try {
         const user = await User.findOne({email})
         const hashedPassword = user.password
+        
         bcrypt.compare(password, hashedPassword, function(err, result) {
             if(result){
-                return res.status(200).json({success:true,msg:"correct details",user})
+                let userData = {_id:user._id,email:user.email,first_name:user.first_name,last_name:user.last_name}
+                return res.status(200).json({success:true,msg:"correct details",user:userData})
             }
             
             return res.status(401).json({success:false,msg:"incorrect password"})
@@ -64,6 +69,7 @@ export const handleForgotPassword = async (req,res) => {
 
     const user = await User.findOne({...req.body})
 
+    
     if(!user){
         return res.status(400).json({success:false,msg:"user not exits"})
     }
@@ -105,6 +111,6 @@ export const handleResetPassword = async (req,res) => {
         return res.status(200).json({success:true,msg:"password updated successfully"})
     }
 
-    return res.status(400).json({success:false,msg:"token did not match, user did not exists with the provided token"})
+    return res.status(401).json({success:false,msg:"token did not match, user did not exists with the provided token"})
 
 }
