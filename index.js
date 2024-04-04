@@ -4,6 +4,8 @@ import { userRouter } from "./routes/user.routes.js"
 import { classRouter } from "./routes/class.router.js"
 import { studentRouter } from "./routes/student.router.js"
 import { attendanceRouter } from "./routes/attendance.router.js"
+import { job } from "./utils/cron.js"
+
 
 import cors from "cors"
 import dotenv from "dotenv"
@@ -26,6 +28,7 @@ app.get("/",(req,res) =>{
     return res.send("hello")
 })
 
+job.start()
 app.use("/api/user",userRouter)
 app.use("/api/classes",classRouter)
 app.use("/api/students",studentRouter)
